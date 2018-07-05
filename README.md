@@ -23,7 +23,7 @@ Score Display starts at 00 –
 
 ### Press Button A
 * Starts timer countdown from 30 to 00.
-* Buzzer Sounds at initial button press *(how long?)*
+* Buzzer Sounds at initial button press **(how long?)**
 * Pauses timer while between 30 and 00, B button resets timer if paused
 * Starts timer when paused.
 
@@ -38,14 +38,13 @@ Score Display starts at 00 –
 
 ### Hold Button D
 * Displays High Score for 2 Seconds
-
-*(this might work better if it displays the high score while the button is held down and only if the timer isn't running)*
+* **(this might work better if it displays the high score while the button is held down and only if the timer isn't running)**
 
 ### Press Button C
 * Subtracts from Score
 
 ### Hold Button C
-* *(for how long? not quite sure the purpose of this function)*
+* **(for how long? not quite sure the purpose of this function)**
 * Resets Score
 
 ### While Running, No Button Press
