@@ -1,14 +1,4 @@
 /*
- Controlling large 7-segment displays
- By: Nathan Seidle
- SparkFun Electronics
- Date: February 25th, 2015
- License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
-
- This code demonstrates how to post two numbers to a 2-digit display usings two large digit driver boards.
-
- Here's how to hook up the Arduino pins to the Large Digit Driver IN
-
  Arduino pin 6 -> CLK (Green on the 6-pin cable)
  5 -> LAT (Blue)
  7 -> SER on the IN side (Yellow)
@@ -24,6 +14,8 @@
 
 */
 
+#include <EEPROM.h>
+
 //GPIO declarations
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 byte segmentClock = 6;
@@ -35,12 +27,30 @@ byte aPin = 10;
 byte bPin = 11;
 byte cPin = 12;
 byte dPin = 13;
+
+//Buzzer
+byte buzzer = 8;
+
+//Reset button
+byte resetButton = 9;
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+unsigned long previousMillis = 0;
+boolean timerRunning = false;
+boolean currentGame = false;
+int timer = 30;
+int score = 0;
+int highscore = 0;
+int currentButton = 0; //none=0, A=1, B=2, C=3, D=4, reset=-1
+int previousButton =0;
+unsigned long presstime = 0;
+
+const int eeAddress = 0;
 
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("Large Digit Driver Example");
+  Serial.println("Putter Scoreboard");
 
   pinMode(segmentClock, OUTPUT);
   pinMode(segmentData, OUTPUT);
@@ -49,19 +59,87 @@ void setup()
   digitalWrite(segmentClock, LOW);
   digitalWrite(segmentData, LOW);
   digitalWrite(segmentLatch, LOW);
+
+  //remote receiver
+  pinMode(aPin, INPUT);
+  pinMode(bPin, INPUT);
+  pinMode(cPin, INPUT);
+  pinMode(dPin, INPUT);
+
+  //buzzer
+  pinMode(buzzer, OUTPUT);
+  digitalWrite(buzzer, HIGH);
+  delay(250);
+  digitalWrite(buzzer, LOW);
+
+  //reset
+  pinMode(resetButton, INPUT_PULLUP);
+
+  //read highscore from eeprom
+  EEPROM.get(eeAddress, highscore);
+  if ((highscore > 200) || (highscore < 0))
+  {
+    highscore = 0;
+  }
 }
 
-int number = 0;
 
 void loop()
 {
-  showNumber(number); //Test pattern
-  number++;
-  number %= 100; //Reset x after 99
+  //handle buttons
+  if (digitalRead(aPin) == HIGH)
+  
+  if (digitalRead(resetButton) == LOW)
+  {
+    if (previousButton != -1)
+    {
+      presstime = millis();
+    }
+    else if (millis() - presstime > 2000)
+    {
+      highscore = 0;
+      //write 0 to eeprom 
+    }
+    currentButton = -1;
+  }
+  
+  if timerRunning
+  {
+    if (digitalRead(aPin) == HIGH)
+    {
+      timerRunning = false;
+    }
+    if (millis() - previousMillis >= 1000)
+    {
+      //increment timer
+      timer -= 1;
+      previousMillis = millis();
+      updateDisplay(timer, score);
+      if (timer == 0)
+      {
+        //end of game logic
+        currentGame = false;
+      }
+    }
+  }
+  else
+  {
+    if (digitalRead(aPin) == HIGH)
+    {
+      timerRunning = true;
+      previousMillis = millis();
+      if currentGame
+      {
+        
+      }
+    }
+  }
+}
 
-  Serial.println(number); //For debugging
-
-  delay(500);
+void updateDisplay(int curtime, int curscore)
+{
+  showNumber(curscore);
+  showNumber(curtime);
 }
 
 //Takes a number and displays 2 numbers. Displays absolute value (no negatives)
