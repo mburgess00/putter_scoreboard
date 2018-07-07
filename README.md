@@ -23,7 +23,7 @@ Score Display starts at 00 –
 
 ### Press Button A
 * Starts timer countdown from 30 to 00.
-* Buzzer Sounds at initial button press **(how long?)**
+* Buzzer Sounds for .5s at initial button press
 * Pauses timer while between 30 and 00, B button resets timer if paused
 * Starts timer when paused.
 
