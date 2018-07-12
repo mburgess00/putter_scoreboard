@@ -135,11 +135,11 @@ void loop()
       showingHighScore = false;
     }
   }
-  else if (digitalRead(resetButton) == HIGH)
-  {
-    currentButton = -1;
-    Serial.println("got reset");
-  }
+  //else if (digitalRead(resetButton) == HIGH)
+  //{
+  //  currentButton = -1;
+  //  Serial.println("got reset");
+  //}
   else
   {
     currentButton = 0;
