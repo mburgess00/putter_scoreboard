@@ -1,3 +1,4 @@
+
 /*
  Arduino pin 6 -> CLK (Green on the 6-pin cable)
  5 -> LAT (Blue)
@@ -36,7 +37,7 @@ const int timerLength = 10;
 
 unsigned long previousMillis = 0;
 boolean timerRunning = false;
-boolean currentGame = false;
+boolean showingHighScore = false;
 int timer = timerLength;
 int score = 0;
 int highscore = 0;
@@ -118,6 +119,21 @@ void loop()
   {
     currentButton = 4;
     Serial.println("got d");
+    if (currentMillis - pressTime > 2000)
+    {
+      if (!showingHighScore)
+      {
+        Serial.println("displaying high score...");
+        int highscore1 = highscore % 10;
+        int highscore2 = highscore / 10;
+        sendString(highscore2, highscore1, 'h', 1, noDecimals);
+        showingHighScore = true;
+      }
+    }
+    else
+    {
+      showingHighScore = false;
+    }
   }
   else if (digitalRead(resetButton) == HIGH)
   {
@@ -160,19 +176,42 @@ void loop()
         case 2: 
           if (!timerRunning)
           {
+            //reset condition
             timer = timerLength;
             Serial.print("timer = ");
             Serial.println(timer);
+            Serial.println("score = 0");
+            score = 0;
             timer1 = timer % 10;
             timer2 = timer / 10;
+            score1 = 0;
+            score2 = 0;
             sendString(score2, score1, timer2, timer1, noDecimals);
           }
           break;
         case 3: 
+          //subtract from score
+          if (score > 0)
+          {
+            score--;
+            score1 = score % 10;
+            score2 = score / 10;
+            sendString(score2, score1, timer2, timer1, noDecimals);
+          }
           break;
         case 4: 
+          //add to score
+          if (currentMillis - pressTime <= 2000)
+          {
+            score ++;
+            score1 = score % 10;
+            score2 = score / 10;
+            sendString(score2, score1, timer2, timer1, noDecimals);
+          }
           break;
         case -1: 
+          highscore = 0;  
+          EEPROM.write(eeAddress, highscore);
           break;
       }
     }
@@ -196,6 +235,11 @@ void loop()
       {
         tone(buzzer, 1000, 1000);
         timerRunning = 0;
+        if (score > highscore)
+        {
+          highscore = score;
+          EEPROM.write(eeAddress, highscore);
+        }
       }
       previousMillis = currentMillis;
 
