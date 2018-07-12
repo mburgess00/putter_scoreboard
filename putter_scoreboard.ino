@@ -32,7 +32,7 @@ byte buzzer = 8;
 //Reset button
 byte resetButton = 9;
 
-const int timerLength = 10;
+const int timerLength = 30;
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 unsigned long previousMillis = 0;
@@ -233,7 +233,7 @@ void loop()
       sendString(score2, score1, timer2, timer1, noDecimals);
       if (timer == 0)
       {
-        tone(buzzer, 1000, 1000);
+        tone(buzzer, 1000, 2000);
         timerRunning = 0;
         if (score > highscore)
         {
