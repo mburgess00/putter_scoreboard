@@ -98,8 +98,8 @@ void loop()
   
   if (timer >= timerLength)
   {
-    timer1 = (timer - 1) % 10;
-    timer2 = (timer - 1) / 10;
+    timer1 = (timer - 2) % 10;
+    timer2 = (timer - 2) / 10;
   }
   else
   {
@@ -268,8 +268,8 @@ void startTimer()
   int timer2 = 0;
   if (timer >= timerLength)
   {
-    timer1 = (timer - 1) % 10;
-    timer2 = (timer - 1) / 10;
+    timer1 = (timer - 2) % 10;
+    timer2 = (timer - 2) / 10;
   }
   else
   {
