@@ -165,6 +165,7 @@ void loop()
           else
           {
             timer = 30;
+            score = 0;
             startTimer();
           }
           break;
@@ -272,7 +273,7 @@ void startTimer()
   sendString(' ', 1, timer2, timer1, noDecimals);
   tone(buzzer, 1000, 250);
   delay(750);
-  sendString('g', 'o', timer2, timer1, noDecimals);
+  sendString(0, 0, timer2, timer1, noDecimals);
   tone(buzzer, 1200, 1000);
   timerRunning = true;
 }
