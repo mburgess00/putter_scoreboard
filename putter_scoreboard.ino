@@ -293,16 +293,19 @@ void startTimer()
 
 void sendString(byte a, byte b, byte c, byte d, boolean decimals[4])
 {
-  postChar(d, decimals[3]);
-  postChar(c, decimals[2]);
-  postChar(b, decimals[1]);
-  postChar(a, decimals[0]);
+  byte segment1 = getSegments(d, decimals[3]);
+  byte segment2 = getSegments(c, decimals[3]);
+  byte segment3 = getSegments(b, decimals[3]);
+  byte segment4 = getSegments(a, decimals[3]);
+  postChar(segment1);
+  postChar(segment2);
+  postChar(segment3);
+  postChar(segment4);
   digitalWrite(segmentLatch, LOW);
   digitalWrite(segmentLatch, HIGH);  
 }
 
-//Given a number, or '-', shifts it out to the display
-void postChar(byte digit, boolean decimal)
+byte getSegments(byte digit, boolean decimal)
 {
   //    -  A
   //   / / F/B
@@ -356,6 +359,13 @@ void postChar(byte digit, boolean decimal)
   //Serial.print("segments: ");
   //Serial.println(segments);
 
+  return segments;
+
+}
+
+//Given a number, or '-', shifts it out to the display
+void postChar(byte segments)
+{
   //Clock these bits out to the drivers
   for (byte x = 0 ; x < 8 ; x++)
   {
