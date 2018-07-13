@@ -162,6 +162,11 @@ void loop()
           {
             startTimer();
           }
+          else
+          {
+            timer = 30;
+            startTimer();
+          }
           break;
         case 2: 
           if (!timerRunning)
