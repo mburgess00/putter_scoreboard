@@ -286,7 +286,7 @@ void startTimer()
   tone(buzzer, 1000, 250);
   delay(750);
   sendString(0, 0, timer2, timer1, noDecimals);
-  tone(buzzer, 1200, 1000);
+  tone(buzzer, 1500, 1000);
   timerRunning = true;
 }
 
