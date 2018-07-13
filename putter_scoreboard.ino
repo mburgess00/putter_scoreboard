@@ -36,13 +36,14 @@ const int timerLength = 30;
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 unsigned long previousMillis = 0;
+unsigned long gameEndMillis = 0;
 boolean timerRunning = false;
 boolean showingHighScore = false;
 int timer = timerLength;
 int score = 0;
 int highscore = 0;
 int currentButton = 0; //none=0, A=1, B=2, C=3, D=4, reset=-1
-int previousButton =0;
+int previousButton = 0;
 unsigned long pressTime = 0;
 
 const int eeAddress = 0;
@@ -99,6 +100,41 @@ void loop()
   int score1 = score % 10;
   int score2 = score / 10;
 
+  int highscore1 = highscore % 10;
+  int highscore2 = highscore / 10;
+  
+  previousButton = currentButton;
+  if (digitalRead(aPin) == HIGH)
+  {
+    currentButton = 1;
+    Serial.println("got a");
+  }
+  else if (digitalRead(bPin) == HIGH)
+  {
+    currentButton = 2;
+    Serial.println("got b");
+  }
+  else if (digitalRead(cPin) == HIGH)
+  {
+    currentButton = 3;
+    Serial.println("got c");
+  }
+  else if (digitalRead(dPin) == HIGH)
+  {
+    currentButton = 4;
+    Serial.println("got d");
+  }
+  //else if (digitalRead(resetButton) == HIGH)
+  //{
+  //  currentButton = -1;
+  //  Serial.println("got reset");
+  //}
+  else
+  {
+    currentButton = 0;
+  }
+  
+    
   if (currentButton != previousButton)
   {
     if (previousButton == 0)
@@ -155,13 +191,10 @@ void loop()
           break;
         case 4: 
           //add to score
-          if (currentMillis - pressTime <= 2000)
-          {
-            score ++;
-            score1 = score % 10;
-            score2 = score / 10;
-            sendString(score2, score1, timer2, timer1, noDecimals);
-          }
+          score ++;
+          score1 = score % 10;
+          score2 = score / 10;
+          sendString(score2, score1, timer2, timer1, noDecimals);
           break;
         case -1: 
           highscore = 0;  
@@ -170,54 +203,6 @@ void loop()
       }
     }
   }
-  
-  previousButton = currentButton;
-  if (digitalRead(aPin) == HIGH)
-  {
-    currentButton = 1;
-    Serial.println("got a");
-  }
-  else if (digitalRead(bPin) == HIGH)
-  {
-    currentButton = 2;
-    Serial.println("got b");
-  }
-  else if (digitalRead(cPin) == HIGH)
-  {
-    currentButton = 3;
-    Serial.println("got c");
-  }
-  else if (digitalRead(dPin) == HIGH)
-  {
-    currentButton = 4;
-    Serial.println("got d");
-    if (currentMillis - pressTime > 2000)
-    {
-      if (!showingHighScore)
-      {
-        Serial.println("displaying high score...");
-        int highscore1 = highscore % 10;
-        int highscore2 = highscore / 10;
-        sendString(highscore2, highscore1, 'h', 1, noDecimals);
-        showingHighScore = true;
-      }
-    }
-    else
-    {
-      showingHighScore = false;
-    }
-  }
-  //else if (digitalRead(resetButton) == HIGH)
-  //{
-  //  currentButton = -1;
-  //  Serial.println("got reset");
-  //}
-  else
-  {
-    currentButton = 0;
-  }
-  
-    
 
 
 
@@ -228,7 +213,6 @@ void loop()
     {
       Serial.print("timer=");
       Serial.println(timer);
-      timer--;
       timer1 = timer % 10;
       timer2 = timer / 10;
       sendString(score2, score1, timer2, timer1, noDecimals);
@@ -241,8 +225,29 @@ void loop()
           highscore = score;
           EEPROM.write(eeAddress, highscore);
         }
+        gameEndMillis = currentMillis;
       }
       previousMillis = currentMillis;
+      timer--;
+
+    }
+  }
+  else if ((timer == timerLength) || (timer <= 0))
+  {
+    //display high score alternating with current score
+    if (currentMillis - gameEndMillis > 3000)
+    {
+      gameEndMillis = currentMillis;
+      if (showingHighScore)
+      {
+        sendString(score2, score1, timer2, timer1, noDecimals);
+        showingHighScore = false;
+      }
+      else
+      {
+        sendString(highscore2, highscore1, 'h', 1, noDecimals);
+        showingHighScore = true;
+      }
 
     }
   }
