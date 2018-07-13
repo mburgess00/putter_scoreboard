@@ -39,7 +39,7 @@ unsigned long previousMillis = 0;
 unsigned long gameEndMillis = 0;
 boolean timerRunning = false;
 boolean showingHighScore = false;
-int timer = timerLength;
+int timer = timerLength + 1;
 int score = 0;
 int highscore = 0;
 int currentButton = 0; //none=0, A=1, B=2, C=3, D=4, reset=-1
@@ -93,9 +93,19 @@ void setup()
 void loop()
 {
   unsigned long currentMillis = millis();
+  int timer1 = 0;
+  int timer2 = 0;
   
-  int timer1 = timer % 10;
-  int timer2 = timer / 10;
+  if (timer >= timerLength)
+  {
+    timer1 = timer % 10;
+    timer2 = timer / 10;
+  }
+  else
+  {
+    timer1 = (timer - 1) % 10;
+    timer2 = (timer - 1) / 10;
+  }
   
   int score1 = score % 10;
   int score2 = score / 10;
@@ -156,7 +166,7 @@ void loop()
           }
           else
           {
-            timer = 30;
+            timer = timerLength + 1;
             score = 0;
             startTimer();
           }
@@ -165,7 +175,7 @@ void loop()
           if (!timerRunning)
           {
             //reset condition
-            timer = timerLength;
+            timer = timerLength + 1;
             Serial.print("timer = ");
             Serial.println(timer);
             Serial.println("score = 0");
@@ -230,7 +240,7 @@ void loop()
 
     }
   }
-  else if ((timer == timerLength) || (timer <= 0))
+  else if ((timer >= timerLength) || (timer <= 0))
   {
     //display high score alternating with current score
     if (currentMillis - gameEndMillis > 3000)
@@ -254,8 +264,18 @@ void loop()
 
 void startTimer()
 {
-  int timer1 = timer % 10;
-  int timer2 = timer / 10;
+  int timer1 = 0;
+  int timer2 = 0;
+  if (timer >= timerLength)
+  {
+    timer1 = timer % 10;
+    timer2 = timer / 10;
+  }
+  else
+  {
+    timer1 = (timer - 1) % 10;
+    timer2 = (timer - 1) / 10;
+  }
   sendString(' ', 3, timer2, timer1, noDecimals);
   tone(buzzer, 1000, 250);
   delay(750);
