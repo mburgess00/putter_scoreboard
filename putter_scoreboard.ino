@@ -166,7 +166,7 @@ void loop()
           }
           else
           {
-            timer = timerLength + 2;
+            timer = timerLength + 1;
             score = 0;
             startTimer();
           }
@@ -175,7 +175,7 @@ void loop()
           if (!timerRunning)
           {
             //reset condition
-            timer = timerLength + 2;
+            timer = timerLength + 1;
             Serial.print("timer = ");
             Serial.println(timer);
             Serial.println("score = 0");
@@ -271,8 +271,8 @@ void startTimer()
   int timer2 = 0;
   if (timer >= timerLength)
   {
-    timer1 = (timer - 2) % 10;
-    timer2 = (timer - 2) / 10;
+    timer1 = (timer - 1) % 10;
+    timer2 = (timer - 1) / 10;
   }
   else
   {
@@ -290,6 +290,7 @@ void startTimer()
   delay(750);
   sendString(0, 0, timer2, timer1, noDecimals);
   tone(buzzer, 1500, 1000);
+  timer++;
   timerRunning = true;
 }
 
