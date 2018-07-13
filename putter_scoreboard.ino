@@ -219,6 +219,7 @@ void loop()
     //Serial.println(currentMillis - previousMillis);
     if (currentMillis - previousMillis >= 1000)
     {
+      timer--;
       Serial.print("timer=");
       Serial.println(timer);
       timer1 = timer % 10;
@@ -236,7 +237,6 @@ void loop()
         gameEndMillis = currentMillis;
       }
       previousMillis = currentMillis;
-      timer--;
 
     }
   }
