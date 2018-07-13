@@ -98,13 +98,13 @@ void loop()
   
   if (timer >= timerLength)
   {
-    timer1 = timer % 10;
-    timer2 = timer / 10;
+    timer1 = (timer - 1) % 10;
+    timer2 = (timer - 1) / 10;
   }
   else
   {
-    timer1 = (timer - 1) % 10;
-    timer2 = (timer - 1) / 10;
+    timer1 = timer % 10;
+    timer2 = timer / 10;
   }
   
   int score1 = score % 10;
@@ -268,13 +268,13 @@ void startTimer()
   int timer2 = 0;
   if (timer >= timerLength)
   {
-    timer1 = timer % 10;
-    timer2 = timer / 10;
+    timer1 = (timer - 1) % 10;
+    timer2 = (timer - 1) / 10;
   }
   else
   {
-    timer1 = (timer - 1) % 10;
-    timer2 = (timer - 1) / 10;
+    timer1 = timer % 10;
+    timer2 = timer / 10;
   }
   sendString(' ', 3, timer2, timer1, noDecimals);
   tone(buzzer, 1000, 250);
