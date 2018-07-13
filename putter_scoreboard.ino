@@ -137,21 +137,13 @@ void loop()
     
   if (currentButton != previousButton)
   {
-    if (previousButton == 0)
+    if (currentButton != 0)
     {
-      pressTime = currentMillis;
-    }
-    if (currentButton == 0)
-    {
-      //button has been lifted
+      //button has been pressed
       Serial.print("Button: ");
-      Serial.print(previousButton);
-      Serial.print(" has been pressed for ");
-      Serial.println(currentMillis - pressTime);
+      Serial.print(currentButton);
       
-      //here's where we do the magic of button presses, as the button has been released.
-      
-      switch (previousButton)
+      switch (currentButton)
       {
         case 1: 
           if (timerRunning)
