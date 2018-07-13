@@ -98,53 +98,7 @@ void loop()
   
   int score1 = score % 10;
   int score2 = score / 10;
-  
-  previousButton = currentButton;
-  if (digitalRead(aPin) == HIGH)
-  {
-    currentButton = 1;
-    Serial.println("got a");
-  }
-  else if (digitalRead(bPin) == HIGH)
-  {
-    currentButton = 2;
-    Serial.println("got b");
-  }
-  else if (digitalRead(cPin) == HIGH)
-  {
-    currentButton = 3;
-    Serial.println("got c");
-  }
-  else if (digitalRead(dPin) == HIGH)
-  {
-    currentButton = 4;
-    Serial.println("got d");
-    if (currentMillis - pressTime > 2000)
-    {
-      if (!showingHighScore)
-      {
-        Serial.println("displaying high score...");
-        int highscore1 = highscore % 10;
-        int highscore2 = highscore / 10;
-        sendString(highscore2, highscore1, 'h', 1, noDecimals);
-        showingHighScore = true;
-      }
-    }
-    else
-    {
-      showingHighScore = false;
-    }
-  }
-  //else if (digitalRead(resetButton) == HIGH)
-  //{
-  //  currentButton = -1;
-  //  Serial.println("got reset");
-  //}
-  else
-  {
-    currentButton = 0;
-  }
-  
+
   if (currentButton != previousButton)
   {
     if (previousButton == 0)
@@ -216,6 +170,53 @@ void loop()
       }
     }
   }
+  
+  previousButton = currentButton;
+  if (digitalRead(aPin) == HIGH)
+  {
+    currentButton = 1;
+    Serial.println("got a");
+  }
+  else if (digitalRead(bPin) == HIGH)
+  {
+    currentButton = 2;
+    Serial.println("got b");
+  }
+  else if (digitalRead(cPin) == HIGH)
+  {
+    currentButton = 3;
+    Serial.println("got c");
+  }
+  else if (digitalRead(dPin) == HIGH)
+  {
+    currentButton = 4;
+    Serial.println("got d");
+    if (currentMillis - pressTime > 2000)
+    {
+      if (!showingHighScore)
+      {
+        Serial.println("displaying high score...");
+        int highscore1 = highscore % 10;
+        int highscore2 = highscore / 10;
+        sendString(highscore2, highscore1, 'h', 1, noDecimals);
+        showingHighScore = true;
+      }
+    }
+    else
+    {
+      showingHighScore = false;
+    }
+  }
+  //else if (digitalRead(resetButton) == HIGH)
+  //{
+  //  currentButton = -1;
+  //  Serial.println("got reset");
+  //}
+  else
+  {
+    currentButton = 0;
+  }
+  
     
 
 
