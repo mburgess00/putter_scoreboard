@@ -39,7 +39,7 @@ unsigned long previousMillis = 0;
 unsigned long gameEndMillis = 0;
 boolean timerRunning = false;
 boolean showingHighScore = false;
-int timer = timerLength + 1;
+int timer = timerLength + 2;
 int score = 0;
 int highscore = 0;
 int currentButton = 0; //none=0, A=1, B=2, C=3, D=4, reset=-1
@@ -166,7 +166,7 @@ void loop()
           }
           else
           {
-            timer = timerLength + 1;
+            timer = timerLength + 2;
             score = 0;
             startTimer();
           }
@@ -175,7 +175,7 @@ void loop()
           if (!timerRunning)
           {
             //reset condition
-            timer = timerLength + 1;
+            timer = timerLength + 2;
             Serial.print("timer = ");
             Serial.println(timer);
             Serial.println("score = 0");
