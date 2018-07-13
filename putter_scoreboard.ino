@@ -189,7 +189,7 @@ void loop()
           break;
         case 3: 
           //subtract from score
-          if ((score > 0) && (timer > 0))
+          if (score > 0)
           {
             score--;
             score1 = score % 10;
@@ -199,12 +199,15 @@ void loop()
           break;
         case 4: 
           //add to score
-          if (timer > 0)
+          score ++;
+          score1 = score % 10;
+          score2 = score / 10;
+          sendString(score2, score1, timer2, timer1, noDecimals);
+          if ((timer <= 0) && (score > highscore))
           {
-            score ++;
-            score1 = score % 10;
-            score2 = score / 10;
-            sendString(score2, score1, timer2, timer1, noDecimals);
+            //new high score
+            highscore = score;
+            EEPROM.write(eeAddress, highscore);
           }
           break;
         case -1: 
