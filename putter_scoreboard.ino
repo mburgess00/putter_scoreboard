@@ -35,6 +35,11 @@ byte resetButton = 9;
 const int timerLength = 30;
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+//for remote control, set this to HIGH
+//for switches, set this to LOW
+boolean on = HIGH;
+
+
 unsigned long previousMillis = 0;
 unsigned long gameEndMillis = 0;
 boolean timerRunning = false;
@@ -68,6 +73,14 @@ void setup()
   pinMode(bPin, INPUT);
   pinMode(cPin, INPUT);
   pinMode(dPin, INPUT);
+
+  if (on == LOW)
+  {
+    pinmode(aPin, INPUT_PULLUP);
+    pinmode(bPin, INPUT_PULLUP);
+    pinmode(cPin, INPUT_PULLUP);
+    pinmode(dPin, INPUT_PULLUP);
+  }
 
   //buzzer
   pinMode(buzzer, OUTPUT);
@@ -114,22 +127,22 @@ void loop()
   int highscore2 = highscore / 10;
   
   previousButton = currentButton;
-  if (digitalRead(aPin) == HIGH)
+  if (digitalRead(aPin) == on)
   {
     currentButton = 1;
     Serial.println("got a");
   }
-  else if (digitalRead(bPin) == HIGH)
+  else if (digitalRead(bPin) == on)
   {
     currentButton = 2;
     Serial.println("got b");
   }
-  else if (digitalRead(cPin) == HIGH)
+  else if (digitalRead(cPin) == on)
   {
     currentButton = 3;
     Serial.println("got c");
   }
-  else if (digitalRead(dPin) == HIGH)
+  else if (digitalRead(dPin) == on)
   {
     currentButton = 4;
     Serial.println("got d");
