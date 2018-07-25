@@ -76,10 +76,10 @@ void setup()
 
   if (on == LOW)
   {
-    pinmode(aPin, INPUT_PULLUP);
-    pinmode(bPin, INPUT_PULLUP);
-    pinmode(cPin, INPUT_PULLUP);
-    pinmode(dPin, INPUT_PULLUP);
+    pinMode(aPin, INPUT_PULLUP);
+    pinMode(bPin, INPUT_PULLUP);
+    pinMode(cPin, INPUT_PULLUP);
+    pinMode(dPin, INPUT_PULLUP);
   }
 
   //buzzer
